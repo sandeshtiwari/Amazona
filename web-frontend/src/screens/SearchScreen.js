@@ -256,10 +256,7 @@ const SearchScreen = () => {
                   <Link
                     key={x + 1}
                     className="mx-1"
-                    to={{
-                      pathname: '',
-                      search: getFilterUrl({ page: x + 1 }),
-                    }}
+                    to={getFilterUrl({ page: x + 1 })}
                   >
                     <Button
                       className={Number(page) === x + 1 ? 'text-bold' : ''}
