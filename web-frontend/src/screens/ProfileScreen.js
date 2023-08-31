@@ -27,6 +27,9 @@ const ProfileScreen = () => {
   const [email, setEmail] = useState(userInfo.email);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [sellerName, setSellerName] = useState('');
+  const [sellerLogo, setSellerLogo] = useState('');
+  const [sellerDescription, setSellerDescription] = useState('');
 
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
@@ -36,24 +39,28 @@ const ProfileScreen = () => {
     e.preventDefault();
     try {
       dispatch({ type: 'UPDATE_REQUEST' });
-      const { data } = await axios.put(
-        '/api/users/profile',
-        {
-          name,
-          email,
-          password,
-        },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
+      const requestData = {
+        name,
+        email,
+        password,
+      };
+      if (userInfo.isSeller) {
+        // requestData.isSeller = true;
+        requestData.sellerName = sellerName;
+        requestData.sellerLogo = sellerLogo;
+        requestData.sellerDescription = sellerDescription;
+      }
+      const { data } = await axios.put('/api/users/profile', requestData, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
       dispatch({ type: 'UPDATE_SUCCESS' });
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('User updated successfully!');
     } catch (err) {
       dispatch({ type: 'FETCH_FAIL' });
-      toast.err(getError(err));
+      console.log(err);
+      toast.error(getError(err));
     }
   };
   return (
@@ -98,6 +105,38 @@ const ProfileScreen = () => {
             required
           />
         </Form.Group>
+        {userInfo.isSeller && (
+          <>
+            <h2>Seller</h2>
+            <Form.Group className="mb-3" controlId="sellerName">
+              <Form.Label>Seller Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={sellerName}
+                onChange={(e) => setSellerName(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="sellerLogo">
+              <Form.Label>Seller Logo</Form.Label>
+              <Form.Control
+                type="text"
+                value={sellerLogo}
+                onChange={(e) => setSellerLogo(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="sellerDescription">
+              <Form.Label>Seller Description</Form.Label>
+              <Form.Control
+                type="text"
+                value={sellerDescription}
+                onChange={(e) => setSellerDescription(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </>
+        )}
         <div className="mb-3">
           <Button type="submit">Update</Button>
         </div>

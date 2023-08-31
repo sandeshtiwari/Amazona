@@ -35,6 +35,7 @@ import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import SellerRoute from './components/SellerRoute';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -118,6 +119,16 @@ function App() {
                     <Link className="nav-link" to="/signin">
                       Sign In
                     </Link>
+                  )}
+                  {userInfo && userInfo.isSeller && (
+                    <NavDropdown title="Seller" id="admin-nav-dropdown">
+                      <LinkContainer to="/productlist/seller">
+                        <NavDropdown.Item>Products</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/orderlist/seller">
+                        <NavDropdown.Item>Orders</NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
                   )}
                   {userInfo && userInfo.isAdmin && (
                     <NavDropdown title="Admin" id="admin-nav-dropdown">
@@ -213,9 +224,9 @@ function App() {
               <Route
                 path="/admin/products"
                 element={
-                  <AdminRoute>
+                  <SellerRoute>
                     <ProductListScreen />
-                  </AdminRoute>
+                  </SellerRoute>
                 }
               />
               <Route
@@ -237,9 +248,9 @@ function App() {
               <Route
                 path="/admin/product/:id"
                 element={
-                  <AdminRoute>
+                  <SellerRoute>
                     <ProductEditScreen />
-                  </AdminRoute>
+                  </SellerRoute>
                 }
               />
               <Route
@@ -248,6 +259,22 @@ function App() {
                   <AdminRoute>
                     <UserEditScreen />
                   </AdminRoute>
+                }
+              />
+              <Route
+                path="/productlist/seller"
+                element={
+                  <SellerRoute>
+                    <ProductListScreen />
+                  </SellerRoute>
+                }
+              />
+              <Route
+                path="/orderlist/seller"
+                element={
+                  <SellerRoute>
+                    <OrderListScreen />
+                  </SellerRoute>
                 }
               />
               <Route path="/" element={<HomeScreen />} />
