@@ -36,11 +36,15 @@ productRouter.post(
 productRouter.put(
   '/:id',
   isAuth,
-  isAdmin,
+  isAdminOrSeller,
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
     if (product) {
+      if (product.seller._id.toString() !== req.user._id && !req.user.isAdmin) {
+        return res.send(401).send({ message: 'Not authorized' });
+      }
+
       product.name = req.body.name;
       product.slug = req.body.slug;
       product.price = req.body.price;
@@ -61,10 +65,13 @@ productRouter.put(
 productRouter.delete(
   '/:id',
   isAuth,
-  isAdmin,
+  isAdminOrSeller,
   expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
+      if (product.seller._id.toString() !== req.user._id && !req.user.isAdmin) {
+        return res.status(401).send({ message: 'Not authorized' });
+      }
       await product.deleteOne();
       res.send({ message: 'Product Deleted' });
     } else {
