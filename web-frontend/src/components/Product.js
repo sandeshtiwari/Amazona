@@ -39,6 +39,9 @@ const Product = (props) => {
           numReviews={product.numReviews}
         ></Rating>
         <Card.Text>${product.price}</Card.Text>
+        <Link to={`/seller?seller_id=${product.seller._id}`}>
+          {product.seller.name}
+        </Link>
         {product.countInStock === 0 ? (
           <Button variant="light" disabled>
             Out of Stock
@@ -48,7 +51,7 @@ const Product = (props) => {
         )}
       </Card.Body>
     </Card>
-  )
+  );
 }
 
 export default Product

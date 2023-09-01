@@ -6,7 +6,7 @@ import { isAdmin, isAdminOrSeller, isAuth } from '../utils.js';
 const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().populate('seller', 'name email seller');
   res.send(products);
 });
 
