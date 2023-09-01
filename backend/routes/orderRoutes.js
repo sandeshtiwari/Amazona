@@ -26,6 +26,7 @@ orderRouter.get(
     if (isSeller && !isAdmin) {
       sellerFilter = { seller: req.user._id };
       orders = await Order.find(sellerFilter).populate('user', 'name');
+      console.log(sellerFilter, orders);
     } else {
       orders = await Order.find().populate('user', 'name');
     }
@@ -38,6 +39,15 @@ orderRouter.post(
   '/',
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    const orderItems = req.body.orderItems;
+    const uniqueSellers = [...new Set(orderItems.map((item) => item.seller))];
+
+    if (uniqueSellers.length > 1) {
+      res
+        .status(400)
+        .send({ message: 'Can only order from one seller at a time' });
+      return;
+    }
     const newOrder = new Order({
       orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
       shippingAddress: req.body.shippingAddress,
