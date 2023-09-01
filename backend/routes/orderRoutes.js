@@ -1,6 +1,12 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { isAdmin, isAuth, payOrderEmailTemplate, sendGrid } from '../utils.js';
+import {
+  isAdmin,
+  isAdminOrSeller,
+  isAuth,
+  payOrderEmailTemplate,
+  sendGrid,
+} from '../utils.js';
 import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Product from '../models/productModel.js';
@@ -10,9 +16,20 @@ const orderRouter = express.Router();
 orderRouter.get(
   '/',
   isAuth,
-  isAdmin,
+  isAdminOrSeller,
   expressAsyncHandler(async (req, res) => {
-    const orders = await Order.find().populate('user', 'name');
+    const isSeller = req.user.isSeller;
+    const isAdmin = req.user.isAdmin;
+    let sellerFilter = {};
+
+    let orders;
+    if (isSeller && !isAdmin) {
+      sellerFilter = { seller: req.user._id };
+      orders = await Order.find(sellerFilter).populate('user', 'name');
+    } else {
+      orders = await Order.find().populate('user', 'name');
+    }
+
     res.send(orders);
   })
 );
