@@ -57,6 +57,7 @@ orderRouter.post(
       taxPrice: req.body.taxPrice,
       totalPrice: req.body.totalPrice,
       user: req.user._id,
+      seller: uniqueSellers[0],
     });
     const order = await newOrder.save();
     res.status(201).send({ message: 'New Order Created', order });
