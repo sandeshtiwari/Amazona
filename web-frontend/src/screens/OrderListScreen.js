@@ -111,23 +111,25 @@ const OrderListScreen = () => {
                     ? order.deliveredAt.substring(0, 10)
                     : 'No'}
                 </td>
-                <Button
-                  type="button"
-                  variant="light"
-                  onClick={() => {
-                    navigate(`/order/${order._id}`);
-                  }}
-                >
-                  Details
-                </Button>
-                &nbsp;
-                <Button
-                  type="button"
-                  variant="light"
-                  onClick={() => deleteHandler(order)}
-                >
-                  Delete
-                </Button>
+                <td>
+                  <Button
+                    type="button"
+                    variant="light"
+                    onClick={() => {
+                      navigate(`/order/${order._id}`);
+                    }}
+                  >
+                    Details
+                  </Button>
+                  &nbsp;
+                  <Button
+                    type="button"
+                    variant="light"
+                    onClick={() => deleteHandler(order)}
+                  >
+                    Delete
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>
