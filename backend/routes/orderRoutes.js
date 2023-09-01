@@ -26,7 +26,6 @@ orderRouter.get(
     if (isSeller && !isAdmin) {
       sellerFilter = { seller: req.user._id };
       orders = await Order.find(sellerFilter).populate('user', 'name');
-      console.log(sellerFilter, orders);
     } else {
       orders = await Order.find().populate('user', 'name');
     }
