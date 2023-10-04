@@ -1,57 +1,80 @@
-import React, { useContext } from 'react'
-import { Button, Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import Rating from './Rating'
-import axios from 'axios'
-import { Store } from '../Store'
+import React, { useContext } from 'react';
+import { Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import Rating from './Rating';
+import axios from 'axios';
+import { Store } from '../Store';
 
 const Product = (props) => {
-  const { product } = props
-  const { state, dispatch: ctxDispatch } = useContext(Store)
+  const { product } = props;
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
-  } = state
+  } = state;
 
   const addToCartHandler = async (item) => {
-    const existItem = cartItems.find((x) => x._id === product._id)
-    const quantity = existItem ? existItem.quantity + 1 : 1
-    const { data } = await axios.get(`/api/products/${item._id}`)
+    const existItem = cartItems.find((x) => x._id === product._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${item._id}`);
     if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock')
-      return
+      window.alert('Sorry. Product is out of stock');
+      return;
     }
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...item, quantity },
-    })
-  }
+    });
+  };
   return (
-    <Card className="product">
-      <Link to={`/product/${product.slug}`}>
-        <img src={product.image} className="card-img-top" alt={product.name} />
-      </Link>
-      <Card.Body>
-        <Link to={`/product/${product.slug}`}>
-          <Card.Title>{product.name}</Card.Title>
+    <>
+      <div className="border-1 border-gray-700 rounded-md md:w-64 md:h-96 overflow-visible">
+        <Link
+          to={`/product/${product.slug}`}
+          className="h-full w-full flex-3 transition duration-200 hover:opacity-80"
+        >
+          <img
+            src={product.image}
+            className="card-img-top object-cover w-full h-full p-0.5"
+            alt={product.name}
+          />
         </Link>
-        <Rating
-          rating={product.rating}
-          numReviews={product.numReviews}
-        ></Rating>
-        <Card.Text>${product.price}</Card.Text>
-        <Link to={`/seller?seller_id=${product.seller._id}`}>
-          {product.seller.name}
-        </Link>
-        {product.countInStock === 0 ? (
-          <Button variant="light" disabled>
-            Out of Stock
-          </Button>
-        ) : (
-          <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
-        )}
-      </Card.Body>
-    </Card>
+        <div className="mt-5 flex flex-col justify-between flex-1">
+          <Link to={`/product/${product.slug}`}>
+            <h2 className="text-2xl overflow-hidden max-w-20 truncate">
+              {product.name}
+            </h2>
+          </Link>
+          <Rating
+            rating={product.rating}
+            numReviews={product.numReviews}
+          ></Rating>
+          <h2 className="text-lg">${product.price}</h2>
+          <Link
+            to={`/seller?seller_id=${product.seller._id}`}
+            className="text-gray-500"
+          >
+            {product.seller.name}
+          </Link>
+          {product.countInStock === 0 ? (
+            <button
+              variant="light"
+              disabled
+              className="bg-gray-200 rounded p-1 mt-2"
+            >
+              Out of Stock
+            </button>
+          ) : (
+            <button
+              className="border-2 rounded bg-yellow-500 p-1 mt-2 transition duration-300 hover:bg-gray-300"
+              onClick={() => addToCartHandler(product)}
+            >
+              Add to cart
+            </button>
+          )}
+        </div>
+      </div>
+    </>
   );
-}
+};
 
-export default Product
+export default Product;

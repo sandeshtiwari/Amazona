@@ -64,9 +64,9 @@ const SellerScreen = () => {
           </Card>
         </Col>
         <Col md={8}>
-          <Row>
+          <Row className="flex md:flex-row justify-between">
             {sellerInfo.products.map((product) => (
-              <Col key={product.slug} className="mb-3">
+              <Col key={product.slug} className="mb-72">
                 <Product product={product}></Product>
               </Col>
             ))}
