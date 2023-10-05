@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Rating from './Rating';
 import axios from 'axios';
 import { Store } from '../Store';
+import Button from '../UI/Button';
 
 const Product = (props) => {
   const { product } = props;
@@ -56,20 +57,13 @@ const Product = (props) => {
             {product.seller.name}
           </Link>
           {product.countInStock === 0 ? (
-            <button
-              variant="light"
-              disabled
-              className="bg-gray-200 rounded p-1 mt-2"
-            >
+            <Button type="secondary" disabled={true}>
               Out of Stock
-            </button>
+            </Button>
           ) : (
-            <button
-              className="border-2 rounded bg-yellow-500 p-1 mt-2 transition duration-300 hover:bg-gray-300"
-              onClick={() => addToCartHandler(product)}
-            >
+            <Button onClick={() => addToCartHandler(product)}>
               Add to cart
-            </button>
+            </Button>
           )}
         </div>
       </div>
