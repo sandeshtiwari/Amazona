@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Rating from './Rating';
 import axios from 'axios';
@@ -28,20 +27,21 @@ const Product = (props) => {
   };
   return (
     <>
-      <div className="border-1 border-gray-700 rounded-md md:w-64 md:h-96 overflow-visible">
+      <div className="flex flex-col justify-center items-center w-80 p-2 h-full mt-32 mb-20 md:mb-10 md:mt-24 sm:mt-10 rounded-md bg-yellow-50">
         <Link
           to={`/product/${product.slug}`}
-          className="h-full w-full flex-3 transition duration-200 hover:opacity-80"
+          className="flex justify-center items-center w-full h-96"
         >
           <img
             src={product.image}
-            className="card-img-top object-cover w-full h-full p-0.5"
+            className="p-0.5 w-full h-full rounded-sm"
             alt={product.name}
           />
         </Link>
-        <div className="mt-5 flex flex-col justify-between flex-1">
+
+        <div className="mt-5 flex flex-col justify-around items-center flex-auto w-full space-y-0">
           <Link to={`/product/${product.slug}`}>
-            <h2 className="text-2xl overflow-hidden max-w-20 truncate">
+            <h2 className="text-2xl overflow-hidden w-72 text-center truncate px-3">
               {product.name}
             </h2>
           </Link>
@@ -49,19 +49,19 @@ const Product = (props) => {
             rating={product.rating}
             numReviews={product.numReviews}
           ></Rating>
-          <h2 className="text-lg">${product.price}</h2>
+          <h2 className="text-lg m-0">${product.price}</h2>
           <Link
             to={`/seller?seller_id=${product.seller._id}`}
-            className="text-gray-500"
+            className="text-gray-500 m-0"
           >
             {product.seller.name}
           </Link>
           {product.countInStock === 0 ? (
-            <Button type="secondary" disabled={true}>
+            <Button className="w-1/2 m-0" type="secondary" disabled={true}>
               Out of Stock
             </Button>
           ) : (
-            <Button onClick={() => addToCartHandler(product)}>
+            <Button className="w-1/2" onClick={() => addToCartHandler(product)}>
               Add to cart
             </Button>
           )}

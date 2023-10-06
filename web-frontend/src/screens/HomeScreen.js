@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 // import data from '../data';
 // import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Col, Row } from 'react-bootstrap';
+// import { Col, Row } from 'react-bootstrap';
 import Product from '../components/Product';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
@@ -55,13 +55,11 @@ const HomeScreen = () => {
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
-          <Row className="flex md:flex-row justify-between">
+          <div className="grid grid-cols-1 place-items-center mb-10 pb-10 md:grid-cols-4 max-w-1/2 w-full gap-y-16 sm:gap-x-64">
             {products.map((product) => (
-              <Col key={product.slug} sm={6} md={4} lg={3} className="mb-72">
-                <Product product={product}></Product>
-              </Col>
+              <Product key={product.slug} product={product}></Product>
             ))}
-          </Row>
+          </div>
         )}
       </div>
     </div>
